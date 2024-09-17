@@ -89,5 +89,16 @@ class pr002 {
                 System.out.print(p + "\t" + q + "\t");
                 System.out.print((p&q) + "\t" + (p|q) + "\t");
                 System.out.println((p^q) + "\t" + (!p));
+
+		//Пример неожиданного повышения типов данных
+		System.out.println("\n");
+		byte b11;
+		int i11;
+		b11 = 10;
+		i11 = b11 * b11; //При операции перемножения двух переменных типа byte получается повышение результата до типа int
+
+		b11 = 10;
+		b11 = (byte)(b11 * b11); // Необходимо приведение типа int к типу byte
+		System.out.println("i11 и b11: " + i11 + " " + b11);
 	}
 }
