@@ -121,5 +121,28 @@ class pr003 {
 		System.out.println("Для остановки цикла нажимите клавишу \"S\"");
 		for (i8 = 0; (char) System.in.read() != 'S'; i8++)
 			System.out.println("Итерация №" + i8);
+
+		System.out.println("\n");
+		for (i8 = 0; i8 < 10;) {
+			System.out.println("Итерация №" + i8);
+			i8++;
+		}
+		
+		System.out.println("\n");
+		for (; i8 < 20;) {
+			System.out.println("Итерация №" + i8);
+                        i8++;
+		}
+
+		//Бесконечный цикл:
+		//System.out.println("\n");
+		//for (;;);
+		
+		System.out.println("\n");
+		
+		int sum = 0;
+		//Вычисление сумм чисел от 1 до 5
+		for(i8 = 1; i8 <= 5; sum += i8++);
+		System.out.println("Сумма чисел равна " + sum);
 	}
 }
