@@ -11,10 +11,16 @@ class TwoDShape {
 	TwoDShape(double w, double h) {
 		width = w;
 		height = h;
+		System.out.println("Внутри конструктора TwoDShape(double w, double h)");
 	}
 	//Конструктор объекта с одинаковыми высотой и шириной
 	TwoDShape(double x) {
 		width = height = x;
+	}
+	//Конструктор объекта на базе существующего объекта
+	TwoDShape(TwoDShape ob) {
+		width = ob.width;
+		height = ob.height;
 	}
 
 	void showDim() {
@@ -52,11 +58,17 @@ class Triangle extends TwoDShape {
 		super(w, h);
 		//Установка значения для переменной подкласса
 		style = s;
+		System.out.println("Внутри конструктора Triangle(String s, double w, double h)");
 	}
 	//Конструктор с одним параметром 
 	Triangle(double x) {
 		super(x);
 		style = "закрашенный";
+	}
+	//Конструктор объекта на базе существующего треугольника
+	Triangle(Triangle ob) {
+		super(ob); //Передаём объект Triangle конструктору суперкласса
+		style = ob.style;
 	}
 	//Конструктор с демонстрацией доступа к одноимённой переменной суперкласса
 	Triangle(int a, int b) {
@@ -66,11 +78,63 @@ class Triangle extends TwoDShape {
 		System.out.println("Значение common в подклассе: " + common);
 	}
 
+
 	double area() {
 		return getWidth()*getHeight()/2;
 	}
 	void showStyle() {		
 		System.out.println("Стиль: " + style);
+	}
+}
+
+//Демонстрация строгой типизации при присваивании ссылок на объект
+class X {
+	int a;
+	X(int i) {
+		a = i;
+	}
+	void show() {
+		System.out.println("Значение a: " + a);
+	}
+}
+class Y {
+	int a;
+        Y(int i) {
+                a = i;
+        }
+
+}
+class Z extends X {
+	int b;
+	Z(int i, int j) {
+		super(j);
+		b = i;
+	}
+
+	void show() {
+		System.out.println("Значение a и b: " + a + " " + b);
+	}
+}
+
+class ColorTriangle extends Triangle {
+	private String color;
+
+	ColorTriangle (String c, String s, double w, double h) {
+		super(s, w, h);
+		color = c;
+		System.out.println("Внутри конструктора ColorTriangle(String c, String s, double w, double h)");
+	}
+	ColorTriangle (ColorTriangle ob) {
+		super(ob);
+		color = ob.color;
+	}
+
+	String getColor() {
+		return color;
+	}
+
+	void showColor() {
+		System.out.println("Цвет: " + color);
 	}
 }
 class Rectangle extends TwoDShape {
@@ -121,6 +185,10 @@ class pr009 {
 		Triangle t2 = new Triangle("контурный", 8.0, 12.0);
 		Triangle t3 = new Triangle(4.0);
 		Triangle t4 = new Triangle(5, 10);
+		ColorTriangle t5 = new ColorTriangle("синий", "контурный", 8.0, 12.0);
+		ColorTriangle t6 = new ColorTriangle("красный","закрашенный", 2.0, 5.0);
+		Triangle t7 = new Triangle(t2);
+		ColorTriangle t8 = new ColorTriangle(t5);
 		Rectangle r1 = new Rectangle("сплошная", 4.0, 4.0);
 		Rectangle r2 = new Rectangle(5.0);
 		System.out.println();
@@ -157,6 +225,25 @@ class pr009 {
                 System.out.println("Площадь: " + t3.area());
                 System.out.println();
 
+		System.out.println("Информация об объекте t5: ");
+		t5.showStyle();
+		t5.showDim();
+		t5.showColor();
+		System.out.println();
+		
+		System.out.println("Информация об объекте t7: ");
+                t7.showStyle();
+                t7.showDim();
+                System.out.println("Площадь: " + t7.area());
+                System.out.println();
+
+		System.out.println("Информация об объекте t8: ");
+                t8.showStyle();
+                t8.showDim();
+		t8.showColor();
+                System.out.println("Площадь: " + t8.area());
+                System.out.println();
+
 		System.out.println("Информация об объекте r1: ");
                 r1.showOutline();
                 r1.showDim();
@@ -175,5 +262,30 @@ class pr009 {
                         System.out.println("Не является квадратом");
                 System.out.println("Площадь: " + r2.area());
                 System.out.println();
+
+		//Демонстрация строгого контроля типов:
+		X x = new X(10);
+		X x2;
+		Y y = new Y(5);
+		Z z = new Z(5,6);
+		x2 = x;
+		x2 = z; //Допустимое присваивание ссылки на объект подкласса
+
+		x.show(); //Демонстрация динамической диспетчеризации методов
+		System.out.println("Выполнение show() при ссылке на объект подкласса");
+		x2.show();
+		x2 = x;
+		System.out.println("Выполнение show() при ссылке на объект суперкласса");
+		x2.show();
+
+		System.out.println();
+
+		System.out.println("x2.a: " + x2.a);
+		//System.out.println("x2.b: " + x2.b); Внутренняя переменная подкласса недоступна ссылочной переменной родительского класса
+
+		
+		//x2 = y; Недопустимое присваивание ссылки на объект другого типа
+
+
 	}
 }
