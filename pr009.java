@@ -2,25 +2,30 @@
 class TwoDShape {
 	private double width;
 	private double height;
+	private String name;
 	int common;
 	//Конструктор без параметров
 	TwoDShape() {
 		width = height = 0.0;
+		name = "абстрактная двумерная фигура";
 	}
 	//Конструктор с двумя параметрами
-	TwoDShape(double w, double h) {
+	TwoDShape(double w, double h, String n) {
 		width = w;
 		height = h;
+		name = n;
 		System.out.println("Внутри конструктора TwoDShape(double w, double h)");
 	}
 	//Конструктор объекта с одинаковыми высотой и шириной
-	TwoDShape(double x) {
+	TwoDShape(double x, String n) {
 		width = height = x;
+		name = n;
 	}
 	//Конструктор объекта на базе существующего объекта
 	TwoDShape(TwoDShape ob) {
 		width = ob.width;
 		height = ob.height;
+		name = ob.name;
 	}
 
 	void showDim() {
@@ -42,6 +47,13 @@ class TwoDShape {
                         height = 290;
                 else height = h;
         }
+	double area() {
+		System.out.println("Метод area() должен быть переопределён в подклассе");
+		return 0.0;
+	}
+	String getName() {
+		return name;
+	}
 }
 class Triangle extends TwoDShape {
 	String style;
@@ -55,14 +67,14 @@ class Triangle extends TwoDShape {
 	//Конструктор с тремя параметрами
 	Triangle(String s, double w, double h) {
 		//Вызов конструктора суперкласса
-		super(w, h);
+		super(w, h, "треугольник");
 		//Установка значения для переменной подкласса
 		style = s;
 		System.out.println("Внутри конструктора Triangle(String s, double w, double h)");
 	}
 	//Конструктор с одним параметром 
 	Triangle(double x) {
-		super(x);
+		super(x, "треугольник");
 		style = "закрашенный";
 	}
 	//Конструктор объекта на базе существующего треугольника
@@ -96,6 +108,8 @@ class X {
 	void show() {
 		System.out.println("Значение a: " + a);
 	}
+	void show(String msg) {
+	}
 }
 class Y {
 	int a;
@@ -111,8 +125,14 @@ class Z extends X {
 		b = i;
 	}
 
+/*	
 	void show() {
+		super.show(); //Вызов одноимённого метода из суперкласса
 		System.out.println("Значение a и b: " + a + " " + b);
+	}
+*/
+	void show(String msg) {
+		System.out.println(msg + b);
 	}
 }
 
@@ -149,13 +169,13 @@ class Rectangle extends TwoDShape {
 
 	Rectangle(String o, double w, double h) {
 		//Вызов конструктора суперкласса
-		super(w, h);
+		super(w, h, "прямоугольник");
 		//Установка значения для переменной подкласса
 		outline = o;
 	}
 
 	Rectangle(double x) {
-		super(x);
+		super(x, "прямоугольник");
 		outline = "сплошная";
 	}
 
@@ -164,6 +184,12 @@ class Rectangle extends TwoDShape {
                 super.common = a;
                 common = b;
         }
+
+	//Конструктор для создания прямоугольника из существующего объекта
+	Rectangle(Rectangle ob) {
+		super(ob);
+		outline = ob.outline;
+	}
 
 
 	double area() {
@@ -274,9 +300,12 @@ class pr009 {
 		x.show(); //Демонстрация динамической диспетчеризации методов
 		System.out.println("Выполнение show() при ссылке на объект подкласса");
 		x2.show();
+		x2.show("Перегруженная версия метода из подкласса ");
+		z.show("Строка");
 		x2 = x;
 		System.out.println("Выполнение show() при ссылке на объект суперкласса");
 		x2.show();
+		
 
 		System.out.println();
 
@@ -285,7 +314,23 @@ class pr009 {
 
 		
 		//x2 = y; Недопустимое присваивание ссылки на объект другого типа
+		//
+		//Демонстрация вызова методов вычисления площади для переменной суперкласса
 
+		TwoDShape[] shapes = new TwoDShape[5];
 
+		shapes[0] = new Triangle("контурный", 8.0, 12.0);
+		shapes[1] = new Rectangle(10);
+		shapes[2] = new Rectangle("сплошная", 10, 4);
+		shapes[3] = new Triangle(7.0);
+		shapes[4] = new TwoDShape(10, 20, "абстрактная фигура");
+
+		System.out.println();
+
+		for(int i=0; i<shapes.length; i++) {
+			System.out.println("Имя объекта: " + shapes[i].getName());
+			System.out.println("Площадь: " + shapes[i].area());
+			System.out.println();
+		}
 	}
 }
